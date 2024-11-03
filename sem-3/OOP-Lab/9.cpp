@@ -40,9 +40,20 @@ public:
 
 int main()
 {
-    // Create 3 objects of Complex class
-    Complex c1(3.0, 4.0);
-    Complex c2(1.0, 2.0);
+    double r, i;
+
+    cout << "Enter the real part of the first complex number: ";
+    cin >> r;
+    cout << "Enter the imaginary part of the first complex number: ";
+    cin >> i;
+    Complex c1(r, i);
+
+    cout << "Enter the real part of the second complex number: ";
+    cin >> r;
+    cout << "Enter the imaginary part of the second complex number: ";
+    cin >> i;
+    Complex c2(r, i);
+
     Complex c3;
 
     // Add c1 and c2

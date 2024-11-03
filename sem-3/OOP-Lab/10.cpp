@@ -29,8 +29,15 @@ int addMembers(const ClassA &a, const ClassB &b)
 
 int main()
 {
-    ClassA objA(10);
-    ClassB objB(20);
+    int a, b;
+    std::cout << "Enter value for A: ";
+    std::cin >> a;
+    std::cout << "Enter value for B: ";
+    std::cin >> b;
+
+    ClassA objA(a);
+    ClassB objB(b);
+
     std::cout << "Sum of members: " << addMembers(objA, objB) << std::endl;
     return 0;
 }
