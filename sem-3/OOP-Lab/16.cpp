@@ -8,7 +8,7 @@ class Company
 public:
     string s;
 
-    int isvalid(string s)
+    void isvalid(string s)
     {
         if (s.length() >= 3 && s.length() <= 100)
         {
@@ -17,7 +17,6 @@ public:
                 if (!isalpha(c)) // isalpha fn. is a standard library fn. used to check whether a character is an alphabetic letter (uppercase or lowercase).
                 {
                     cout << "INVALID" << endl;
-                    return -1;
                 }
             }
             cout << "VALID" << endl;
