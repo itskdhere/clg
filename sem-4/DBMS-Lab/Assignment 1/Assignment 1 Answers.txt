@@ -1,0 +1,89 @@
+0 --------------------------------------
+DROP TABLE Student_1426;
+
+DROP TABLE MCA_1426;
+
+DROP TABLE MSc_1426;
+
+1 --------------------------------------
+CREATE TABLE Student_1426 (
+Roll Number(5),
+Name Varchar2(30),
+Age Number(5),
+Course Varchar2(5),
+Math Number(6, 2),
+Physics Number(6, 2),
+Computer Number(6, 2),
+Birthday Date
+);
+
+2 --------------------------------------
+CREATE TABLE MSc_1426 AS SELECT * FROM Student_1426 WHERE 1=2;
+
+3 --------------------------------------
+DESC MSc_1426;
+
+4 --------------------------------------
+CREATE TABLE MCA_1426 AS SELECT * FROM Student_1426 WHERE 1=2;
+
+ALTER TABLE MCA_1426
+RENAME COLUMN Course TO Department;
+
+ALTER TABLE MCA_1426
+RENAME COLUMN Name TO FirstName;
+
+5 --------------------------------------
+DESC MCA_1426;
+
+6 --------------------------------------
+INSERT INTO Student_1426
+VALUES (1, 'Rahul', 19, 'BCA', 79.5, 67, 89, '15-jun-93');
+
+INSERT INTO Student_1426
+VALUES (2, 'Kunal', 21, 'BCA', 68, 76, 59.5, '16-aug-91');
+
+INSERT INTO Student_1426
+VALUES (3, 'Aditi', 20, 'MSc', 90, 73, 56, '20-sep-92');
+
+INSERT INTO Student_1426
+VALUES (4, 'Sumit', 20, 'MCA', 57.5, 78, 81, '07-dec-91');
+
+INSERT INTO Student_1426
+VALUES (5, 'Anirban', 22, 'MCA', 80, 68, 63, '15-sep-94');
+
+INSERT INTO Student_1426
+VALUES (6, 'Kumkum', 21, 'BCA', 72, 54.5, 60, '08-feb-95');
+
+INSERT INTO Student_1426
+VALUES (7, 'Suman', 21, 'BCA', 91.5, 32, 61, '10-mar-94');
+
+INSERT INTO Student_1426
+VALUES (8, 'Rohit', 22, 'MSc', 85, 76, 92, '19-apr-92');
+
+7 --------------------------------------
+SELECT * FROM Student_1426;
+
+8 --------------------------------------
+SELECT * FROM Student_1426 WHERE Roll=5;
+
+9 --------------------------------------
+SELECT Roll, Name, Math, Physics, Computer
+FROM Student_1426;
+
+10--------------------------------------
+INSERT INTO MCA_1426 (SELECT * FROM Student_1426 WHERE Course='MCA');
+
+SELECT * FROM MCA_1426;
+
+11--------------------------------------
+DESC Student_1426;
+DESC MCA_1426;
+
+12--------------------------------------
+UPDATE Student_1426
+SET Math=95
+WHERE Roll=7;
+
+13--------------------------------------
+DELETE FROM Student_1426
+WHERE Roll=2;
