@@ -1,0 +1,78 @@
+1  -------------------------------------------
+SELECT Book_Name, Cost
+FROM Books_1426
+WHERE Cost = (SELECT MAX(Cost) FROM Book_Name);
+
+2  -------------------------------------------
+SELECT 
+    MIN(Cost) AS Min_Cost,
+    AVG(Cost) AS Avg_Cost,
+    SUM(Cost) AS Total_Cost
+FROM Books_1426;
+
+3  -------------------------------------------
+SELECT Member_Id, Member_Name
+FROM Member_1426
+WHERE Member_Id IN (
+    SELECT DISTINCT Member_Id
+    FROM Issue_1426
+    WHERE Issue_Date BETWEEN '26-01-2011' AND '14-04-2011'
+);
+
+4 -------------------------------------------
+SELECT Book_Name, Author_name, Category
+FROM Books_1426
+WHERE Category <> 'OTHERS';
+
+5A -------------------------------------------
+a ------------------------------------
+SELECT Book_Name, Author_name
+FROM Books_1426
+WHERE Author_name LIKE '____t%';
+
+b ------------------------------------
+SELECT Book_Name, Author_name
+FROM Books_1426
+WHERE Author_name LIKE 'S%';
+
+c ------------------------------------
+SELECT Book_Name, Author_name
+FROM Books_1426
+WHERE Author_name LIKE 'S_';
+
+d ------------------------------------
+SELECT Book_Name, Author_name
+FROM Books_1426
+WHERE Author_name LIKE '%a';
+
+e ------------------------------------
+SELECT Book_Name, Author_name
+FROM Books_1426
+WHERE Author_name LIKE '__a_a%';
+
+f ------------------------------------
+SELECT Book_Name, Author_name
+FROM Books_1426
+WHERE Author_name LIKE '%a_';
+
+g ------------------------------------
+SELECT Book_Name, Author_name
+FROM Books_1426
+WHERE Author_name LIKE 'D%e';
+
+5B -------------------------------------------
+h ------------------------------------
+SELECT Member_Id, Member_Name
+FROM Member_1426
+WHERE Member_Name LIKE 'S%';
+
+i ------------------------------------
+SELECT Member_Id, Member_Name
+FROM Member_1426
+WHERE (Member_Name LIKE 'S%' OR Member_Name LIKE 'A%')
+AND Member_Name LIKE '%T%';
+
+5C -------------------------------------------
+SELECT Book_Name, Author_name, Category
+FROM Books_1426
+WHERE Book_Name LIKE '%SQL%';
