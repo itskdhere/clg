@@ -1,0 +1,143 @@
+# Oracle 10g XE on Debian GNU/Linux
+
+Oracle Database 10g Express Edition is a RDBMS from 2005, so direct downloads aren't available on Oracle's website anymore. 
+But the 32-bit (IA-32) version of Debian Packages (`.deb`) are still available here: https://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/    
+
+This can still be installed and used in any Debian based distributions like Debian, Ubuntu, Kali etc. 
+It is recommended to use a VM. If you don't have any Hypervisor installed, you can try
+[VMware Workstation Pro / VMware Fusion Pro](https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion)
+or, [Oracle VirtualBox](https://www.virtualbox.org/).
+
+Let's get started 🐧
+
+
+## Index
+1. [Preparation](#preparation)
+2. [Installation](#installation)
+3. [Setup](#setup)
+4. [Usage](#usage)
+5. [Troubleshooting](#troubleshooting)
+
+
+## Preparation
+1. Adding Support for IA-32 Architecture:
+   ```bash
+   sudo dpkg --add-architecture i386
+   ```
+
+2. Updating & Upgraging Dependencies:
+   ```bash
+   sudo apt update && \
+   sudo apt upgrade -y
+   ```
+
+3. Installing IA-32 Arch. Dependencies For Oracle:
+   ```bash
+   sudo apt install gcc-12-base:i386 libaio1:i386 libc6:i386 libgcc-s1:i386 libidn2-0:i386 libunistring2:i386
+   ```
+
+
+## Installation
+1. Downloading Oracle 10g XE Package:
+   ```bash
+   wget -P ~/Downloads \
+   https://oss.oracle.com/debian/dists/unstable/non-free/binary-i386/oracle-xe_10.2.0.1-1.1_i386.deb
+   ```
+
+2. Installing:
+   ```bash
+   sudo dpkg -i ~/Downloads/oracle-xe_10.2.0.1-1.1_i386.deb
+   ```
+
+
+## Setup
+1. Configuring The DB:
+   ```bash
+   sudo /etc/init.d/oracle-xe configure
+   ```
+   Here, accept all default values & set a short password that you can remember.
+
+2. Adding Env. Vars. in the end of the `.bashrc` or `.profile`:
+   ```bash
+   cat << 'EOF' >> ~/.bashrc
+   
+   export ORACLE_BASE=/usr/lib/oracle/xe/app/oracle
+   export ORACLE_HOME=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server
+   # export NLS_LANG=/usr/lib/oracle/xe/app/oracle/product/10.2.0/server/bin/nls_lang.sh
+   export ORACLE_SID=XE
+   export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
+   export PATH=$ORACLE_HOME/bin:$PATH
+   EOF
+   ```
+
+3. Sourcing the `.bashrc`:
+   ```bash
+   source ~/.bashrc
+   ```
+
+4. Changing Permission from `-rw-r--r--` to `-rw-rw-r--`:
+   ```bash
+   sudo chmod 664 /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/network/log/listener.log
+   ```
+
+5. Adding the user `kd` to `dba` group.
+   ```bash
+   sudo usermod -aG dba kd
+   ```
+   Replace `kd` with your username.
+
+
+## Usage
+You can use the database either from the [GUI](#from-gui) or from the [CLI](#from-cli).
+### From GUI:
+1. Start The Database:   
+Goto `Applications > Start Database`.   
+You need to wait for upto 1 minute.
+
+2. Do Your Work:   
+Goto `Applications > Goto Database Home Page`.   
+This will open either http://localhost:8080/apex/ or http://127.0.0.1:8080/apex/ in your browser.   
+Use the username: `sys` & the password you've created during the setup.
+
+3. Stop The Database:   
+Goto `Applications > Stop Database`.   
+Then run this in the Terminal:
+   ```bash
+   lsnrctl stop
+   ```
+   Now you can safely shut down your VM.
+
+### From CLI:
+1. Start the DB:
+   ```bash
+   bash /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/config/scripts/startdb.sh
+   ```
+   You need to wait for upto 1 minute.
+
+2. Connect to the DB:
+   ```bash
+   sqlplus sys as sysdba
+   ```
+   Use the password you've created during the setup.
+
+3. Stop the DB:
+   ```bash
+   bash /usr/lib/oracle/xe/app/oracle/product/10.2.0/server/config/scripts/stopdb.sh
+   lsnrctl stop
+   ```
+   Now you can safely shut down your VM.
+
+
+## Troubleshooting
+Coming Soon...
+
+<br>
+
+---
+
+> I'd just like to interject for a moment. What you’re referring to as Linux, is in fact, GNU/Linux, or as I’ve recently taken to calling it, GNU plus Linux.
+
+That's it :)   
+Follow me on GitHub: [@itskdhere](https://github.com/itskdhere)
+
+<p align="center">🙂</p>
