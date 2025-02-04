@@ -1,7 +1,7 @@
 1  -------------------------------------------
 SELECT Book_Name, Cost
 FROM Books_1426
-WHERE Cost = (SELECT MAX(Cost) FROM Book_Name);
+WHERE Cost = (SELECT MAX(Cost) FROM Books_1426);
 
 2  -------------------------------------------
 SELECT 
@@ -16,7 +16,7 @@ FROM Member_1426
 WHERE Member_Id IN (
     SELECT DISTINCT Member_Id
     FROM Issue_1426
-    WHERE Issue_Date BETWEEN '26-01-2011' AND '14-04-2011'
+    WHERE Issue_Date BETWEEN '26-Jan-2011' AND '14-Apr-2011'
 );
 
 4 -------------------------------------------
@@ -38,7 +38,7 @@ WHERE Author_name LIKE 'S%';
 c ------------------------------------
 SELECT Book_Name, Author_name
 FROM Books_1426
-WHERE Author_name LIKE 'S_';
+WHERE Author_name LIKE 'S_%';
 
 d ------------------------------------
 SELECT Book_Name, Author_name
@@ -70,7 +70,7 @@ i ------------------------------------
 SELECT Member_Id, Member_Name
 FROM Member_1426
 WHERE (Member_Name LIKE 'S%' OR Member_Name LIKE 'A%')
-AND Member_Name LIKE '%T%';
+AND Member_Name LIKE '%t%';
 
 5C -------------------------------------------
 SELECT Book_Name, Author_name, Category

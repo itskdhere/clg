@@ -18,11 +18,10 @@ CREATE TABLE Member_1426 (
 
 ALTER TABLE Member_1426
 ADD CONSTRAINT pk_member_id
-PRIMARY KEY Member_Id;
+PRIMARY KEY (Member_Id);
 
 ALTER TABLE Member_1426
-ADD CONSTRAINT nn_member_name
-NOT NULL Member_Name;
+MODIFY Member_Name NOT NULL;
 
 ALTER TABLE Member_1426
 ADD CONSTRAINT ck_membership_type
@@ -47,11 +46,10 @@ CREATE TABLE Books_1426 (
 
 ALTER TABLE Books_1426
 ADD CONSTRAINT pk_book_no
-PRIMARY KEY Book_No;
+PRIMARY KEY (Book_No);
 
 ALTER TABLE Books_1426
-ADD CONSTRAINT nn_book_name
-NOT NULL Book_Name;
+MODIFY Book_Name NOT NULL;
 
 ALTER TABLE Books_1426
 ADD CONSTRAINT ck_category
@@ -68,7 +66,7 @@ CREATE TABLE Issue_1426 (
 
 ALTER TABLE Issue_1426
 ADD CONSTRAINT pk_lib_issue_id
-PRIMARY KEY Lib_Issue_Id;
+PRIMARY KEY (Lib_Issue_Id);
 
 ALTER TABLE Issue_1426
 ADD CONSTRAINT fk_book_no
@@ -92,7 +90,7 @@ INSERT INTO Member_1426 VALUES
 (3, 'Ritesh Bhuniya', 'Gujarat', '20-FEB-11', 'Quarterly', 350, 2, 100);
 
 INSERT INTO Member_1426 VALUES
-(4, 'Paresh sen', 'Tripura', '21-MAR-11', 'Half yearly', 700, 1, 200);
+(4, 'Paresh sen', 'Tripura', '21-MAR-11', 'Half Yearly', 700, 1, 200);
 
 INSERT INTO Member_1426 VALUES
 (5, 'Sohini Haldar', 'Birbhum', '11-APR-11', 'Lifetime', 2000, 6, 10);
@@ -104,7 +102,7 @@ INSERT INTO Member_1426 VALUES
 (7, 'Suranjana Basu', 'Purulia', '30-JUN-11', 'Annual', 1400, 3, 50);
 
 INSERT INTO Member_1426 VALUES
-(8, 'Arpita Roy', 'Kolkata', '31-JUL-11', 'Half yearly', 700, 1, 0);
+(8, 'Arpita Roy', 'Kolkata', '31-JUL-11', 'Half Yearly', 700, 1, 0);
 
   B ---------------------------------------------------------
 INSERT INTO Books_1426 VALUES
