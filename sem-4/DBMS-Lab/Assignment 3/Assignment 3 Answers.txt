@@ -76,3 +76,155 @@ AND Member_Name LIKE '%t%';
 SELECT Book_Name, Author_name, Category
 FROM Books_1426
 WHERE Book_Name LIKE '%SQL%';
+
+6  -------------------------------------------
+SELECT COUNT(*) AS TotalBooks
+FROM Books_1426
+WHERE Cost > 350;
+
+7  -------------------------------------------
+SELECT COUNT(DISTINCT Author_name) AS TotalAuthors
+FROM Books_1426;
+
+8  -------------------------------------------
+a ------------------------------------
+SELECT ABS(-167) AS AbsoluteValue
+FROM Dual;
+
+b ------------------------------------
+SELECT POWER(8, 6) AS PowerValue
+FROM Dual;
+
+c ------------------------------------
+SELECT ROUND(134.56789, 2) AS RoundedValue
+FROM Dual;
+
+d ------------------------------------
+SELECT SQRT(144) AS SquareRoot
+FROM Dual;
+
+e ------------------------------------
+SELECT FLOOR(13.15) AS FloorValue, CEIL(13.15) AS CeilValue
+FROM Dual;
+
+9  -------------------------------------------
+SELECT EXTRACT(YEAR FROM SYSDATE) AS Year,
+       EXTRACT(MONTH FROM SYSDATE) AS Month,
+       EXTRACT(DAY FROM SYSDATE) AS Day
+FROM Dual;
+
+10 -------------------------------------------
+SELECT GREATEST(4, 5, 17) AS MaxValue
+FROM Dual;
+
+11 -------------------------------------------
+SELECT LEAST('4', '5', '17') AS MinValue
+FROM Dual;
+
+12 -------------------------------------------
+SELECT SUBSTR('INFOSYS', 3, 4) AS ExtractedText
+FROM Dual;
+
+13 -------------------------------------------
+SELECT ASCII('a') AS Ascii_a, ASCII('S') AS Ascii_S
+FROM Dual;
+
+14 -------------------------------------------
+SELECT LENGTH('INFOSYS') AS WordLength,
+REPLACE('INFOSYS', 'S', 'T') AS ModifiedWord
+FROM Dual;
+
+15 -------------------------------------------
+SELECT Member_Name, Member_address
+FROM Member_1426
+WHERE Member_address LIKE '%Kolkata%';
+
+16 -------------------------------------------
+SELECT Book_Name
+FROM Books_1426
+WHERE Cost BETWEEN 300 AND 500;
+
+17 -------------------------------------------
+SELECT Member_Name
+FROM Member_1426
+WHERE Membership_type = 'Half Yearly';
+
+18 -------------------------------------------
+SELECT Member_Name
+FROM Member_1426
+WHERE EXTRACT(YEAR FROM Acc_Open_Date) = 2011;
+
+19 -------------------------------------------
+SELECT M.Penalty_Amount
+FROM Member_1426 M
+JOIN Issue_1426 I ON M.Member_Id = I.Member_Id
+JOIN Books_1426 B ON I.Book_No = B.Book_No
+WHERE B.Book_Name = 'Let us C';
+
+20 -------------------------------------------
+SELECT MAX(M.Max_Books_Allowed) AS MaxBooks
+FROM Member_1426 M
+JOIN Issue_1426 I ON M.Member_Id = I.Member_Id
+WHERE EXTRACT(MONTH FROM I.Issue_Date) = 1;
+
+21 -------------------------------------------
+SELECT M.Member_Name
+FROM Member_1426 M
+LEFT JOIN Issue_1426 I ON M.Member_Id = I.Member_Id
+WHERE I.Member_Id IS NULL;
+
+22 -------------------------------------------
+SELECT Book_Name, Category
+FROM Books_1426
+WHERE Cost IS NULL;
+
+23 -------------------------------------------
+SELECT Book_Name, Author_name, Cost
+FROM Books_1426
+WHERE Author_name = 'Loni' AND Cost < 600;
+
+24 -------------------------------------------
+SELECT I.Member_Id, I.Book_No, I.Issue_Date, I.Return_date
+FROM Issue_1426 I
+JOIN Books_1426 B ON I.Book_No = B.Book_No
+WHERE I.Return_date IS NULL;
+
+25 -------------------------------------------
+SELECT Book_Name, Category
+FROM Books_1426
+WHERE Category IN ('Science', 'Database');
+
+26 -------------------------------------------
+SELECT Member_Name, Penalty_Amount
+FROM Member_1426
+ORDER BY Penalty_Amount DESC;
+
+27 -------------------------------------------
+SELECT Book_Name, Category, Cost
+FROM Books_1426
+ORDER BY Category ASC, Cost DESC;
+
+28 -------------------------------------------
+SELECT 
+    INITCAP(Book_Name) AS BookName, 
+    UPPER(Author_name) AS AuthorName
+FROM Books_1426
+ORDER BY Book_Name DESC;
+
+29 -------------------------------------------
+SELECT
+    Book_Name,
+    CASE
+        WHEN Category = 'Database' THEN 'D'
+        WHEN Category = 'Science' THEN 'S'
+        WHEN Category = 'RDBMS' THEN 'R'
+        ELSE 'O'
+    END AS CategoryAbbreviation
+FROM Books_1426;
+
+30 -------------------------------------------
+SELECT Member_Name
+FROM Member_1426
+WHERE EXTRACT(YEAR FROM Acc_Open_Date) = 2011;
+
+----------------------------------------------
