@@ -1,0 +1,276 @@
+0  -------------------------------------------
+DROP TABLE Reserved_1426;
+DROP TABLE Boat_1426;
+DROP TABLE Sailor_1426;
+
+-------------------------------------------
+
+CREATE TABLE Sailor_1426 (
+    SID VARCHAR2(4) PRIMARY KEY CHECK (SID LIKE 's%'),
+    SNAME VARCHAR2(10) CHECK (SNAME = INITCAP(SNAME)),
+    MNAME VARCHAR2(10),
+    SURNAME VARCHAR2(10) NOT NULL,
+    RATING NUMBER(2) DEFAULT 0,
+    AGE NUMBER(3,1) NOT NULL
+);
+
+CREATE TABLE Boat_1426 (
+    BID NUMBER(3) PRIMARY KEY,
+    BNAME VARCHAR2(10) CHECK (BNAME = UPPER(BNAME)),
+    COLOR VARCHAR2(6) CHECK (COLOR IN ('red', 'green', 'blue'))
+);
+
+CREATE TABLE Reserved_1426 (
+    SID VARCHAR2(4),
+    BID NUMBER(3),
+    DAY DATE CHECK (DAY < TO_DATE('1-JAN-2000', 'DD-MON-YYYY')),
+    CONSTRAINT composite_pk PRIMARY KEY (SID, BID),
+    CONSTRAINT sid_fk FOREIGN KEY (SID) REFERENCES Sailor_1426(SID),
+    CONSTRAINT bid_fk FOREIGN KEY (BID) REFERENCES Boat_1426(BID)
+);
+
+INSERT ALL
+    INTO Sailor_1426 VALUES ('s22', 'Fredrico', NULL, 'Roberts', 7, 45)
+    INTO Sailor_1426 VALUES ('s31', 'Lubber', NULL, 'Sheen', 8, 55.5)
+    INTO Sailor_1426 VALUES ('s32', 'Charlotte', NULL, 'Gordin', 8, 25.5)
+    INTO Sailor_1426 VALUES ('s58', 'Mary', 'Beth', 'Lyon', 10, 35)
+    INTO Sailor_1426 VALUES ('s64', 'Horatio', NULL, 'Powell', 7, 35.4)
+    INTO Sailor_1426 VALUES ('s71', 'Zorba', NULL, 'Alex', 10, 16)
+    INTO Sailor_1426 VALUES ('s29', 'Brutus', NULL, 'Slater', 1, 33.8)
+    INTO Sailor_1426 VALUES ('s95', 'Deep', 'Graceb', 'Davis', 3, 63.5)
+    INTO Sailor_1426 VALUES ('s74', 'Horatio', NULL, 'Forrest', 9, 35)
+    INTO Sailor_1426 VALUES ('s85', 'Sara', 'Art', 'Powell', 3, 25.5)
+    INTO Sailor_1426 VALUES ('s80', 'Deep', 'Kumar', 'Kumar', 6, 17)
+    INTO Sailor_1426 VALUES ('s87', 'Deep', 'Kumar', 'Jha', NULL, 51)
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO Boat_1426 VALUES (101, 'INTERLAKE', 'blue')
+    INTO Boat_1426 VALUES (102, 'INTERLAKE', 'red')
+    INTO Boat_1426 VALUES (103, 'CLIPPER', 'green')
+    INTO Boat_1426 VALUES (104, 'MARINE', 'red')
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO Reserved_1426 VALUES ('s22', 101, '10-OCT-98')
+    INTO Reserved_1426 VALUES ('s22', 103, '10-AUG-98')
+    INTO Reserved_1426 VALUES ('s22', 102, '10-OCT-98')
+    INTO Reserved_1426 VALUES ('s22', 104, '10-JUL-98')
+    INTO Reserved_1426 VALUES ('s31', 102, '11-OCT-98')
+    INTO Reserved_1426 VALUES ('s31', 103, '11-JUN-98')
+    INTO Reserved_1426 VALUES ('s31', 104, '11-DEC-98')
+    INTO Reserved_1426 VALUES ('s64', 101, '09-MAY-98')
+    INTO Reserved_1426 VALUES ('s64', 102, '09-AUG-98')
+    INTO Reserved_1426 VALUES ('s74', 103, '09-AUG-98')
+    INTO Reserved_1426 VALUES ('s80', 102, '07-JUL-98')
+    INTO Reserved_1426 VALUES ('s87', 101, '08-JUL-98')
+    INTO Reserved_1426 VALUES ('s87', 102, '12-DEC-98')
+SELECT 1 FROM DUAL;
+
+1  -------------------------------------------
+SELECT UPPER(SNAME) AS SAILOR_NAME, AGE 
+FROM Sailor_1426;
+
+2  -------------------------------------------
+SELECT * 
+FROM Sailor_1426 
+ORDER BY SNAME ASC;
+
+3  -------------------------------------------
+SELECT DISTINCT SNAME
+FROM Sailor_1426;
+
+4  -------------------------------------------
+SELECT DISTINCT SNAME, RATING 
+FROM Sailor_1426 
+WHERE RATING BETWEEN 5 AND 10;
+
+5  -------------------------------------------
+SELECT * 
+FROM Sailor_1426 
+ORDER BY RATING ASC, AGE DESC;
+
+6  -------------------------------------------
+SELECT * 
+FROM Sailor_1426 
+WHERE SNAME = 'Horatio' 
+AND AGE = 35.4;
+
+7  -------------------------------------------
+SELECT S.SNAME 
+FROM Sailor_1426 S
+JOIN Reserved_1426 R ON S.SID = R.SID
+WHERE R.BID = 104;
+
+8  -------------------------------------------
+SELECT DISTINCT R.SID 
+FROM Reserved_1426 R
+JOIN Boat_1426 B ON R.BID = B.BID
+WHERE B.COLOR = 'red';
+
+9  -------------------------------------------
+SELECT DISTINCT SNAME 
+FROM Sailor_1426 
+WHERE RATING IS NOT NULL;
+
+10  -------------------------------------------
+SELECT DISTINCT SNAME 
+FROM Sailor_1426 
+WHERE RATING IS NULL;
+
+11  -------------------------------------------
+SELECT DISTINCT B.COLOR 
+FROM Boat_1426 B
+JOIN Reserved_1426 R ON B.BID = R.BID
+JOIN Sailor_1426 S ON R.SID = S.SID
+WHERE S.SNAME = 'Lubber';
+
+12  -------------------------------------------
+SELECT DISTINCT S.SNAME 
+FROM Sailor_1426 S
+JOIN Reserved_1426 R ON S.SID = R.SID;
+
+13  -------------------------------------------
+SELECT SNAME 
+FROM Sailor_1426 
+WHERE SNAME LIKE 'B%B' AND LENGTH(SNAME) >= 3;
+
+14  -------------------------------------------
+SELECT SNAME 
+FROM Sailor_1426 
+WHERE SNAME LIKE 'B%B' AND LENGTH(SNAME) = 3;
+
+15  -------------------------------------------
+SELECT DISTINCT S.SNAME 
+FROM Sailor_1426 S
+JOIN Reserved_1426 R ON S.SID = R.SID
+JOIN Boat_1426 B ON R.BID = B.BID
+WHERE B.COLOR IN ('red', 'green');
+
+16  -------------------------------------------
+SELECT DISTINCT S.SNAME 
+FROM Sailor_1426 S
+JOIN Reserved_1426 R ON S.SID = R.SID
+JOIN Boat_1426 B ON R.BID = B.BID
+WHERE B.COLOR = 'red'
+AND S.SID NOT IN (
+    SELECT R2.SID 
+    FROM Reserved_1426 R2
+    JOIN Boat_1426 B2 ON R2.BID = B2.BID
+    WHERE B2.COLOR = 'green'
+);
+
+17  -------------------------------------------
+SELECT DISTINCT S.SNAME 
+FROM Sailor_1426 S
+JOIN Reserved_1426 R ON S.SID = R.SID
+WHERE R.BID = 103;
+
+18  -------------------------------------------
+SELECT DISTINCT S.SNAME 
+FROM Sailor_1426 S
+JOIN Reserved_1426 R ON S.SID = R.SID
+JOIN Boat_1426 B ON R.BID = B.BID
+WHERE B.COLOR = 'red';
+
+19  -------------------------------------------
+SELECT DISTINCT S.SNAME 
+FROM Sailor_1426 S
+WHERE S.SID NOT IN (
+    SELECT R.SID 
+    FROM Reserved_1426 R
+    JOIN Boat_1426 B ON R.BID = B.BID
+    WHERE B.COLOR = 'red'
+);
+
+20  -------------------------------------------
+SELECT * 
+FROM Sailor_1426 
+WHERE RATING > ANY (
+    SELECT RATING 
+    FROM Sailor_1426 
+    WHERE SNAME = 'Horatio'
+);
+
+21  -------------------------------------------
+SELECT AVG(AGE) AS AVERAGE_AGE
+FROM Sailor_1426
+WHERE RATING = 10;
+
+22  -------------------------------------------
+SELECT SNAME 
+FROM Sailor_1426 
+WHERE AGE > (
+    SELECT MAX(AGE) 
+    FROM Sailor_1426 
+    WHERE RATING = 10
+);
+
+23  -------------------------------------------
+SELECT RATING, MIN(AGE) AS YOUNGEST_AGE
+FROM Sailor_1426
+GROUP BY RATING;
+
+24  -------------------------------------------
+SELECT RATING, SNAME 
+FROM Sailor_1426 
+WHERE AGE >= 18;
+
+25  -------------------------------------------
+SELECT RATING, AVG(AGE) AS AVERAGE_AGE
+FROM Sailor_1426
+GROUP BY RATING
+HAVING COUNT(SID) >= 2;
+
+26  -------------------------------------------
+SELECT R.BID, COUNT(R.SID) AS RESERVATION_COUNT
+FROM Reserved_1426 R
+JOIN Boat_1426 B ON R.BID = B.BID
+WHERE B.COLOR = 'red'
+GROUP BY R.BID;
+
+27  -------------------------------------------
+SELECT * 
+FROM Sailor_1426 
+WHERE RATING = (
+    SELECT MAX(RATING) 
+    FROM Sailor_1426 
+    WHERE RATING < (SELECT MAX(RATING) FROM Sailor_1426)
+);
+
+28  -------------------------------------------
+SELECT SNAME 
+FROM Sailor_1426 
+WHERE RATING = (
+    SELECT MIN(RATING) 
+    FROM Sailor_1426 
+    WHERE RATING > (
+        SELECT MIN(RATING) 
+        FROM Sailor_1426 
+        WHERE RATING > (
+            SELECT MIN(RATING) FROM Sailor_1426
+        )
+    )
+);
+
+29  -------------------------------------------
+SELECT S.SID, S.SNAME 
+FROM Sailor_1426 S
+WHERE NOT EXISTS (
+    SELECT B.BID 
+    FROM Boat_1426 B
+    WHERE NOT EXISTS (
+        SELECT R.BID 
+        FROM Reserved_1426 R
+        WHERE R.SID = S.SID AND R.BID = B.BID
+    )
+);
+
+30  -------------------------------------------
+SELECT S.SID, S.SNAME 
+FROM Sailor_1426 S
+JOIN Reserved_1426 R ON S.SID = R.SID
+GROUP BY S.SID, S.SNAME
+HAVING COUNT(R.BID) > 2;
+
+-----------------------------------------------
