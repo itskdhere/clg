@@ -1,0 +1,106 @@
+1  -------------------------------------------
+CREATE OR REPLACE PROCEDURE add_numbers (
+   p_num1 IN NUMBER,
+   p_num2 IN NUMBER,
+   p_result OUT NUMBER,
+   p_message IN OUT VARCHAR2
+)
+AS
+BEGIN
+   -- Add the numbers and store in OUT parameter
+   p_result := p_num1 + p_num2;
+   
+   -- Update the IN OUT parameter
+   p_message := p_message || ' The sum of ' || p_num1 || ' and ' || p_num2 || ' is ' || p_result;
+   
+EXCEPTION
+   WHEN OTHERS THEN
+      p_message := 'Error: ' || SQLERRM;
+      p_result := NULL;
+END add_numbers;
+/
+
+-- Test the procedure
+DECLARE
+   v_result NUMBER;
+   v_message VARCHAR2(100) := 'Calculation result:';
+BEGIN
+   add_numbers(25, 75, v_result, v_message);
+   DBMS_OUTPUT.PUT_LINE('Result: ' || v_result);
+   DBMS_OUTPUT.PUT_LINE('Message: ' || v_message);
+END;
+/
+
+
+6  -------------------------------------------
+CREATE OR REPLACE PROCEDURE update_book_cost (
+   p_book_id IN Books_1426.Book_No%TYPE
+)
+AS
+   v_count NUMBER;
+BEGIN
+   -- Check if the book exists
+   SELECT COUNT(*)
+   INTO v_count
+   FROM Books_1426
+   WHERE Book_No = p_book_id;
+   
+   IF v_count > 0 THEN
+      -- Update the book cost
+      UPDATE Books_1426
+      SET cost = cost + 50
+      WHERE Book_No = p_book_id;
+      
+      DBMS_OUTPUT.PUT_LINE('Book ID ' || p_book_id || ' cost updated. Rows affected: ' || SQL%ROWCOUNT);
+      COMMIT;
+   ELSE
+      DBMS_OUTPUT.PUT_LINE('Book ID ' || p_book_id || ' not found.');
+   END IF;
+EXCEPTION
+   WHEN OTHERS THEN
+      DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+      ROLLBACK;
+END update_book_cost;
+/
+
+-- Example usage
+BEGIN
+   update_book_cost(101);  -- Replace with actual Book_No
+END;
+/
+
+
+9  -------------------------------------------
+CREATE OR REPLACE FUNCTION get_book_by_author (
+   p_author_name IN Books_1426.Author_name%TYPE
+)
+RETURN VARCHAR2
+AS
+   v_book_name Books_1426.Book_Name%TYPE;
+BEGIN
+   -- Get the first book by the specified author
+   SELECT Book_Name
+   INTO v_book_name
+   FROM Books_1426
+   WHERE UPPER(Author_name) = UPPER(p_author_name)
+   AND ROWNUM = 1;
+   
+   RETURN v_book_name;
+EXCEPTION
+   WHEN NO_DATA_FOUND THEN
+      RETURN 'No books found for author: ' || p_author_name;
+   WHEN TOO_MANY_ROWS THEN
+      RETURN 'Multiple books found. Returning the first one.';
+   WHEN OTHERS THEN
+      RETURN 'Error: ' || SQLERRM;
+END get_book_by_author;
+/
+
+-- Example usage
+DECLARE
+   v_book_title VARCHAR2(100);
+BEGIN
+   v_book_title := get_book_by_author('J.K. Rowling');  -- Replace with actual author name
+   DBMS_OUTPUT.PUT_LINE('Book title: ' || v_book_title);
+END;
+/

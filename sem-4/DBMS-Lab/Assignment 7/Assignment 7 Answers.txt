@@ -1,0 +1,187 @@
+1  -------------------------------------------
+DECLARE
+  a NUMBER(3) := :Enter_a_number;
+  b NUMBER(3) := :Enter_another_number;
+BEGIN
+  IF a > b THEN
+    DBMS_OUTPUT.PUT_LINE('Largest number is: ' || a);
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('Largest number is: ' || b);
+  END IF;
+END;
+
+2  -------------------------------------------
+DECLARE
+  num NUMBER(10) := :Enter_Number;
+BEGIN
+  IF MOD(num, 2) = 0 THEN
+    DBMS_OUTPUT.PUT_LINE(num || ' is Even');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE(num || ' is Odd');
+  END IF;
+END;
+
+3  -------------------------------------------
+DECLARE
+  num NUMBER(4) := :Enter_Number;
+  fact NUMBER := 1;
+  i NUMBER := 1;
+BEGIN
+  WHILE i <= num LOOP
+    fact := fact * i;
+    i := i + 1;
+  END LOOP;
+  DBMS_OUTPUT.PUT_LINE('Factorial of ' || num || ' is: ' || fact);
+END;
+
+4  -------------------------------------------
+DECLARE
+  year NUMBER(4) := :Enter_Year;
+BEGIN
+  IF MOD(year, 400) = 0 OR (MOD(year, 4) = 0 AND MOD(year, 100) != 0) THEN
+    DBMS_OUTPUT.PUT_LINE(year || ' is a Leap Year');
+  ELSE
+    DBMS_OUTPUT.PUT_LINE(year || ' is Not a Leap Year');
+  END IF;
+END;
+
+5  -------------------------------------------
+DECLARE
+  str VARCHAR2(100) := :Enter_String;
+  rev VARCHAR2(100) := '';
+BEGIN
+  FOR i IN REVERSE 1..LENGTH(str) LOOP
+    rev := rev || SUBSTR(str, i, 1);
+  END LOOP;
+  DBMS_OUTPUT.PUT_LINE('Reversed String: ' || rev);
+END;
+
+6  -------------------------------------------
+CREATE TABLE CIRCLE_1426
+(
+  RADIUS NUMBER(3),
+  AREA   NUMBER(10,3)
+);
+
+-- Using WHILE Loop
+DECLARE
+  r NUMBER := 1;
+  a NUMBER;
+BEGIN
+  WHILE r <= 10 LOOP
+    a := 3.141 * r * r;
+    INSERT INTO CIRCLE_1426 VALUES (r, a);
+    r := r + 1;
+  END LOOP;
+END;
+
+SELECT * FROM CIRCLE_1426;
+
+-- Using FOR Loop
+DECLARE
+  a NUMBER;
+BEGIN
+  FOR r IN 1..10 LOOP
+    a := 3.141 * r * r;
+    INSERT INTO CIRCLE_1426 VALUES (r, a);
+  END LOOP;
+END;
+
+SELECT * FROM CIRCLE_1426;
+
+7  -------------------------------------------
+DECLARE
+    Book_Num   Books_1426.Book_No%TYPE;
+    Old_Cost   Books_1426.Cost%TYPE;
+    New_Cost   Books_1426.Cost%TYPE;
+BEGIN
+    Book_Num := :Enter_The_Book_Number;
+    New_Cost := :Enter_The_New_Cost;
+
+    IF New_Cost < 900 THEN
+        SELECT Cost INTO Old_Cost
+        FROM Books_1426
+        WHERE Book_No = Book_Num;
+
+        IF Old_Cost < 450 THEN
+            UPDATE Books_1426
+            SET Cost = New_Cost
+            WHERE Book_No = Book_Num;
+
+            DBMS_OUTPUT.PUT_LINE('Cost Updated for Book No-' || Book_Num);
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('ERROR : Old Cost is greater than or equal to 450');
+        END IF;
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('ERROR : Enter the new cost less than 900');
+    END IF;
+END;
+
+8  -------------------------------------------
+DECLARE
+    ID         Member_1426.Member_ID%TYPE;
+    NAME       Member_1426.Member_Name%TYPE;
+    ADDRESS    Member_1426.Member_Address%TYPE;
+    FEES_PAID  Member_1426.Fees_Paid%TYPE;
+BEGIN
+    ID := :ENTER_THE_ID_OF_THE_MEMBER;
+
+    SELECT Member_Name, Member_Address, Fees_Paid
+    INTO NAME, ADDRESS, FEES_PAID 
+    FROM Member_1426
+    WHERE Member_ID = ID;
+
+    DBMS_OUTPUT.PUT_LINE('ID:' || ID || 
+                         ' NAME: ' || NAME || 
+                         ' ADDRESS: ' || ADDRESS || 
+                         ' FEES PAID: ' || FEES_PAID);
+END;
+
+9  -------------------------------------------
+DECLARE
+    input_str    VARCHAR2(100) := :Enter_String;
+    new_str      VARCHAR2(100) := '';
+    space_count  NUMBER := 0;
+BEGIN
+    FOR i IN 1..LENGTH(input_str) LOOP
+        IF SUBSTR(input_str, i, 1) = ' ' THEN
+            space_count := space_count + 1;
+        ELSE
+            new_str := new_str || SUBSTR(input_str, i, 1);
+        END IF;
+    END LOOP;
+
+    DBMS_OUTPUT.PUT_LINE('String without spaces: ' || new_str);
+    DBMS_OUTPUT.PUT_LINE('No. of spaces: ' || space_count);
+END;
+
+10  -------------------------------------------
+DECLARE
+    str   VARCHAR2(200) := :Enter_String;
+    word  VARCHAR2(50);
+    pos   NUMBER := 1;
+BEGIN
+    LOOP
+        word := REGEXP_SUBSTR(str, '\S+', 1, pos);
+        EXIT WHEN word IS NULL;
+        DBMS_OUTPUT.PUT_LINE(word);
+        pos := pos + 1;
+    END LOOP;
+END;
+
+11  -------------------------------------------
+DECLARE
+    ID    Member_1426.Member_ID%TYPE;
+    NAME  Member_1426.Member_Name%TYPE;
+BEGIN
+    ID := :ENTER_THE_ID_OF_THE_MEMBER;
+
+    SELECT Member_Name
+    INTO NAME 
+    FROM Member_1426
+    WHERE Member_ID = ID;
+
+    DBMS_OUTPUT.PUT_LINE('ID:' || ID || 
+                         ' NAME_UPRCSE: ' || UPPER(NAME) || 
+                         ' NAME_LWRCSE: ' || LOWER(NAME));
+END;

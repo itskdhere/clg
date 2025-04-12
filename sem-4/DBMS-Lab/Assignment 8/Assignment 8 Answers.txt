@@ -1,0 +1,99 @@
+1  -------------------------------------------
+BEGIN
+   -- Update books with cost less than 500
+   UPDATE Books_1426
+   SET cost = cost + 10
+   WHERE cost < 500;
+   
+   -- Display the number of rows affected
+   DBMS_OUTPUT.PUT_LINE('Number of rows updated: ' || SQL%ROWCOUNT);
+   
+   COMMIT;
+EXCEPTION
+   WHEN OTHERS THEN
+      DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+      ROLLBACK;
+END;
+/
+
+
+4  -------------------------------------------
+DECLARE
+   CURSOR member_cursor IS
+      SELECT member_id, max_books_allowed
+      FROM Member_1426;
+   
+   v_member_id Member_1426.member_id%TYPE;
+   v_max_books Member_1426.max_books_allowed%TYPE;
+BEGIN
+   OPEN member_cursor;
+   
+   LOOP
+      FETCH member_cursor INTO v_member_id, v_max_books;
+      EXIT WHEN member_cursor%NOTFOUND;
+      
+      IF v_max_books > 0 THEN
+         -- Deduct only if the result won't be negative
+         UPDATE Member_1426
+         SET max_books_allowed = max_books_allowed - 1
+         WHERE member_id = v_member_id;
+         
+         DBMS_OUTPUT.PUT_LINE('Updated member ' || v_member_id || ': max_books_allowed reduced by 1');
+      ELSE
+         DBMS_OUTPUT.PUT_LINE('ERROR: Cannot update member ' || v_member_id || 
+                             ' - max_books_allowed would become negative');
+      END IF;
+   END LOOP;
+   
+   CLOSE member_cursor;
+   COMMIT;
+EXCEPTION
+   WHEN OTHERS THEN
+      DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+      IF member_cursor%ISOPEN THEN
+         CLOSE member_cursor;
+      END IF;
+      ROLLBACK;
+END;
+/
+
+
+6  -------------------------------------------
+DECLARE
+   CURSOR book_cursor IS
+      SELECT Book_No, Book_Name, Author_name, Cost
+      FROM Books_1426
+      WHERE Cost > 500
+      ORDER BY cost DESC
+      FETCH FIRST 5 ROWS ONLY;
+      
+   v_book_id Member_1426.Book_No%TYPE;
+   v_title Member_1426.Book_Name%TYPE;
+   v_author Member_1426.Author_name%TYPE;
+   v_cost Member_1426.Cost%TYPE;
+BEGIN
+   DBMS_OUTPUT.PUT_LINE('Top 5 Books by Cost:');
+   DBMS_OUTPUT.PUT_LINE('--------------------');
+   
+   OPEN book_cursor;
+   
+   LOOP
+      FETCH book_cursor INTO v_book_id, v_title, v_author, v_cost;
+      EXIT WHEN book_cursor%NOTFOUND OR book_cursor%ROWCOUNT > 5;
+      
+      DBMS_OUTPUT.PUT_LINE('Book ID: ' || v_book_id);
+      DBMS_OUTPUT.PUT_LINE('Title: ' || v_title);
+      DBMS_OUTPUT.PUT_LINE('Author: ' || v_author);
+      DBMS_OUTPUT.PUT_LINE('Cost: ' || v_cost);
+      DBMS_OUTPUT.PUT_LINE('--------------------');
+   END LOOP;
+   
+   CLOSE book_cursor;
+EXCEPTION
+   WHEN OTHERS THEN
+      DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+      IF book_cursor%ISOPEN THEN
+         CLOSE book_cursor;
+      END IF;
+END;
+/
